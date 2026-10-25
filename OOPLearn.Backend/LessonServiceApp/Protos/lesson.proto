@@ -1,7 +1,5 @@
 ﻿syntax = "proto3";
 
-option csharp_namespace = "LessonServiceApp";
-
 package lesson;
 
 service LessonService
@@ -44,7 +42,7 @@ message LessonListResponse
 
 message LessonDetailRequest
 {
-	string lesson_id;
+	string lesson_id = 1;
 }
 
 message LessonDetailResponse

@@ -1,6 +1,6 @@
 ﻿syntax = "proto3";
 
-package task;
+package tasks;
 
 service TaskService
 {
@@ -48,3 +48,4 @@ message SubmitSolutionResponse
 	bool is_correct = 1;
 	string feedback = 2;
 	int32 earned_points = 3;
+}

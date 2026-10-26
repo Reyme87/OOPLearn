@@ -1,0 +1,51 @@
+﻿syntax = "proto3";
+
+package tasks;
+
+service TaskService
+{
+	rpc GetTaskByLesson (LessonTaskRequest) returns (TaskListResponse);
+	rpc SubmitTaskSolution (SubmitSolutionRequest) returns (SubmitSolutionResponse);
+}
+
+message LessonTaskRequest
+{
+	string lesson_id = 1;
+}
+
+enum TaskType
+{
+	UNKNOWN = 0;
+	SINGLE_CHOICE = 1;
+	MULTIPLE_CHOICE = 2;
+	CODE_SNIPPET = 3;
+}
+
+message TaskDto
+{
+	string id = 1;
+	string lesson_id = 2;
+	string title = 3;
+	string description = 4;
+	TaskType type = 5;
+	repeated string options = 6;
+}
+
+message TaskListResponse
+{
+	repeated TaskDto tasks = 1;
+}
+
+message SubmitSolutionRequest
+{
+	string task_id = 1;
+	string user_id = 2;
+	string user_answer = 3;
+}
+
+message SubmitSolutionResponse
+{
+	bool is_correct = 1;
+	string feedback = 2;
+	int32 earned_points = 3;
+}

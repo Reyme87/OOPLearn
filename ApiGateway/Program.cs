@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddGrpcClient<LessonService.LessonServiceClient>(options =>
 {
-    options.Address = new Uri("https://localhost:5001");
+    options.Address = new Uri("http://localhost:5290");
 })
 .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler     // временно
 {
@@ -14,7 +14,7 @@ builder.Services.AddGrpcClient<LessonService.LessonServiceClient>(options =>
 
 builder.Services.AddGrpcClient<TaskService.TaskServiceClient>(options =>
 {
-    options.Address = new Uri("https://localhost:5002");
+    options.Address = new Uri("http://localhost:5059");
 })
 .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler     // временно
 {

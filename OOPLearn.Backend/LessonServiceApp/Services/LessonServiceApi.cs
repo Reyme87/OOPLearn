@@ -30,6 +30,13 @@ public class LessonServiceApi : LessonService.LessonServiceBase
         return Task.FromResult(response);
     }
 
+    public override Task<LessonListResponse> GetLessonsByCategories(CategoryRequest request, ServerCallContext context)
+    {
+        var response = new LessonListResponse();
+
+        return Task.FromResult(response);
+    }
+
     public override Task<LessonDetailResponse> GetLessonDetails(LessonDetailRequest request, ServerCallContext context)
     {
         var response = new LessonDetailResponse

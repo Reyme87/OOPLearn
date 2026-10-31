@@ -22,6 +22,8 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI(config =>
 {
+    config.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiGateway v1");
+
     config.RoutePrefix = string.Empty;
 });
 

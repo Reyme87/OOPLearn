@@ -19,7 +19,7 @@ namespace ApiGateway.Controllers
             return Ok(response.Categories);
         }
 
-        [HttpGet("categories/{categoryId}/lessons")]
+        [HttpGet("categories/{categoryId}/lesson")]
         public async Task<IActionResult> GetLessonByCategory(string categoryId)
         {
             var request = new CategoryRequest { CategoryId = categoryId };

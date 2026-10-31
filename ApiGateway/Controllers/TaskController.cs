@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ApiGateway.Dtos;
+using Microsoft.AspNetCore.Mvc;
 using Tasks;
 
 namespace ApiGateway.Controllers
@@ -20,8 +21,14 @@ namespace ApiGateway.Controllers
         }
 
         [HttpPost("submit")]
-        public async Task<IActionResult> Submit([FromBody] SubmitSolutionRequest request)
+        public async Task<IActionResult> Submit([FromBody] SubmitSolutionDto dto)
         {
+            var request = new SubmitSolutionRequest
+            {
+                TaskId = dto.TaskId,
+                UserId = dto.UserId,
+                UserAnswer = dto.UserAnswer,
+            };
             var response = await _taskClient.SubmitTaskSolutionAsync(request);
 
             return Ok(response);

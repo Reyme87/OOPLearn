@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 
 const props = defineProps<{
-  name: 'book' | 'code' | 'chart' | 'target' | 'zap' | 'shield' | 'settings' | 'star' | 'clock' | 'list';
+  name: 'book' | 'code' | 'chart' | 'target' | 'zap' | 'shield' | 'settings' | 'star' | 'clock' | 'list' | 'flame' | 'lightbulb' | 'check' | 'x';
   size?: number;
   color?: string;
 }>();
@@ -83,6 +83,29 @@ const iconSize = computed(() => props.size || 24);
       <line x1="3" y1="6" x2="3.01" y2="6"></line>
       <line x1="3" y1="12" x2="3.01" y2="12"></line>
       <line x1="3" y1="18" x2="3.01" y2="18"></line>
+    </g>
+
+    <!-- Огонь / Сложность -->
+    <g v-else-if="name === 'flame'">
+      <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.5 4 6.5 2 2 3 3.5 3 6a5 5 0 0 1-10 0z"></path>
+    </g>
+
+    <!-- Лампочка / Подсказка -->
+    <g v-else-if="name === 'lightbulb'">
+      <path d="M9 18h6"></path>
+      <path d="M10 22h4"></path>
+      <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path>
+    </g>
+
+    <!-- Галочка / Успех -->
+    <g v-else-if="name === 'check'">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </g>
+
+    <!-- Крестик / Ошибка -->
+    <g v-else-if="name === 'x'">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
     </g>
   </svg>
 </template>

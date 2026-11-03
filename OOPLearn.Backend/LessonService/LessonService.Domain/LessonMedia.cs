@@ -12,7 +12,7 @@
 
         public string ContentType { get; set; } = string.Empty;
 
-        public string MediaType { get; set; } = string.Empty;
+        public MediaType MediaType { get; set; }
 
         public string? Description { get; set; }
 

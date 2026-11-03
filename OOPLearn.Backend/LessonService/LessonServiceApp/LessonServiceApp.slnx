@@ -4,6 +4,7 @@
     <Project Path="../LessonService.Domain/LessonService.Domain.csproj" Id="2d539b53-df82-4770-bc75-b5e9116036ae" />
   </Folder>
   <Folder Name="/Infrastructure/">
+    <Project Path="../LessonService.Infrastructure/LessonService.Infrastructure.csproj" Id="3c022d05-4e4a-4b1e-9363-b1ed2d97be76" />
     <Project Path="../LessonService.Persistence/LessonService.Persistence.csproj" Id="5bad20e1-22ca-4fca-ba29-8f09326439e2" />
   </Folder>
   <Folder Name="/Presentation/">

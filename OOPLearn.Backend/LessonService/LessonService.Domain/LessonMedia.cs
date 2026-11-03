@@ -16,6 +16,8 @@
 
         public string? Description { get; set; }
 
+        public int OrderIndex { get; set; }
+
         public LessonSection LessonSection { get; set; } = null!;
     }
 }

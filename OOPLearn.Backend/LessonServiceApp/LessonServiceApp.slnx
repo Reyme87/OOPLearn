@@ -1,3 +1,12 @@
 <Solution>
-  <Project Path="LessonServiceApp.csproj" />
+  <Folder Name="/Core/">
+    <Project Path="../LessonService.Application/LessonService.Application.csproj" Id="2a57b037-fdd8-4008-b303-5121ec193047" />
+    <Project Path="../LessonService.Domain/LessonService.Domain.csproj" Id="2d539b53-df82-4770-bc75-b5e9116036ae" />
+  </Folder>
+  <Folder Name="/Infrastructure/">
+    <Project Path="../LessonService.Persistence/LessonService.Persistence.csproj" Id="5bad20e1-22ca-4fca-ba29-8f09326439e2" />
+  </Folder>
+  <Folder Name="/Presentation/">
+    <Project Path="LessonServiceApp.csproj" />
+  </Folder>
 </Solution>

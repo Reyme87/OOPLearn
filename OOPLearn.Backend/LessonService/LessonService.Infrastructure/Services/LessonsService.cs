@@ -4,11 +4,11 @@ using LessonService.Application.Interfaces.Services;
 
 namespace LessonService.Infrastructure.Services
 {
-    public class LessonService : ILessonService
+    public class LessonsService : ILessonService
     {
         private readonly ILessonRepository _repository;
 
-        public LessonService(ILessonRepository repository) => _repository = repository;
+        public LessonsService(ILessonRepository repository) => _repository = repository;
 
         public async Task<List<LessonDto>> GetByCategoryAsync(Guid categoryId, CancellationToken cancellationToken)
         {

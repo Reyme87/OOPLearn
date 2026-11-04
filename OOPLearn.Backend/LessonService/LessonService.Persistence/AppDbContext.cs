@@ -1,9 +1,10 @@
-﻿using LessonService.Domain;
+﻿using LessonService.Application.Interfaces;
+using LessonService.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace LessonService.Persistence
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : DbContext, IAppDbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base (options)
         { }

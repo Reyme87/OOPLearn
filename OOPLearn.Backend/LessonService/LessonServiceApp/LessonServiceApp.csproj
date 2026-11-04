@@ -9,6 +9,11 @@
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.64.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LessonService.Infrastructure\LessonService.Infrastructure.csproj" />
+    <ProjectReference Include="..\LessonService.Persistence\LessonService.Persistence.csproj" />
+  </ItemGroup>
 	
   <ItemGroup>
 	<Protobuf Include="Protos\lesson.proto" GrpcServices="Server" />

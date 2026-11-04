@@ -19,8 +19,4 @@
     <ProjectReference Include="..\LessonService.Application\LessonService.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
 </Project>

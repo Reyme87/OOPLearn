@@ -3,7 +3,7 @@ using Lesson;
 
 namespace LessonServiceApp.Services;
 
-public class LessonServiceApi : LessonService.LessonServiceBase
+public class LessonServiceApi : LessonsService.LessonsServiceBase
 {
     private readonly ILogger<LessonServiceApi> _logger;
 

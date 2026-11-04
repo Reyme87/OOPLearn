@@ -2,7 +2,7 @@
 
 package lesson;
 
-service LessonService
+service LessonsService
 {
 	rpc GetCategories (EmptyRequest) returns (CategoryListResponse);
 	rpc GetLessonsByCategories (CategoryRequest) returns (LessonListResponse);

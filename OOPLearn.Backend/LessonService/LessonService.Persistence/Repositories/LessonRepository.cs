@@ -35,6 +35,7 @@ namespace LessonService.Persistence.Repositories
         {
             return await _context.Lessons.AsNoTracking()
                                          .Include(l => l.Sections.OrderBy(s => s.OrderIndex))
+                                         .ThenInclude(s => s.Media)
                                          .FirstOrDefaultAsync(l => l.Id == id, cancellationToken);
         }
 

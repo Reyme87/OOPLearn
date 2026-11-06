@@ -1,3 +1,4 @@
+using LessonService.Infrastructure;
 using LessonService.Persistence;
 using LessonServiceApp.Services;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -12,6 +13,7 @@ builder.WebHost.ConfigureKestrel(options =>
 builder.Services.AddGrpc();
 
 builder.Services.AddPersistence(builder.Configuration);
+builder.Services.AdddInfrastructure();
 
 var app = builder.Build();
 

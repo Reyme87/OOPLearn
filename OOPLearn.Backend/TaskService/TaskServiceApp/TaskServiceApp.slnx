@@ -1,3 +1,13 @@
 <Solution>
-  <Project Path="TaskServiceApp.csproj" />
+  <Folder Name="/Core/">
+    <Project Path="../TaskService.Application/TaskService.Application.csproj" Id="c4117090-2f15-49ae-966c-3d07e52d69e2" />
+    <Project Path="../TaskService.Domain/TaskService.Domain.csproj" Id="49f37112-3cd1-4e0e-a90c-e0d0889267ae" />
+  </Folder>
+  <Folder Name="/Infrastructure/">
+    <Project Path="../TaskService.Infrastructure/TaskService.Infrastructure.csproj" Id="aea7f1ab-cb54-4af1-9105-7792b00b4220" />
+    <Project Path="../TaskService.Persistence/TaskService.Persistence.csproj" Id="336475ea-9d20-4696-a99a-f9055b1ca196" />
+  </Folder>
+  <Folder Name="/Presentation/">
+    <Project Path="TaskServiceApp.csproj" />
+  </Folder>
 </Solution>

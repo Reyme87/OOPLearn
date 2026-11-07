@@ -3,7 +3,7 @@ using Tasks;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddGrpcClient<LessonService.LessonServiceClient>(options =>
+builder.Services.AddGrpcClient<LessonsService.LessonsServiceClient>(options =>
 {
     options.Address = new Uri("http://localhost:5290");
 });

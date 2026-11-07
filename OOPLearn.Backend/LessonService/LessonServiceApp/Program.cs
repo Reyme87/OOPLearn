@@ -1,3 +1,5 @@
+using LessonService.Infrastructure;
+using LessonService.Persistence;
 using LessonServiceApp.Services;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 
@@ -10,7 +12,17 @@ builder.WebHost.ConfigureKestrel(options =>
 
 builder.Services.AddGrpc();
 
+builder.Services.AddPersistence(builder.Configuration);
+builder.Services.AddInfrastructure();
+
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    await DbInitializer.InitializeAsync(dbContext);
+}
 
 app.MapGrpcService<LessonServiceApi>();
 app.Run();

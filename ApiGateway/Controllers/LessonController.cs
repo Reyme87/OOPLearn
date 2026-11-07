@@ -7,9 +7,9 @@ namespace ApiGateway.Controllers
     [Route("api/lessons")]
     public class LessonController : ControllerBase
     {
-        private readonly LessonService.LessonServiceClient _lessonClient;
+        private readonly LessonsService.LessonsServiceClient _lessonClient;
 
-        public LessonController(LessonService.LessonServiceClient lessonClient) => _lessonClient = lessonClient;
+        public LessonController(LessonsService.LessonsServiceClient lessonClient) => _lessonClient = lessonClient;
 
         [HttpGet("categories")]
         public async Task<IActionResult> GetCategories()

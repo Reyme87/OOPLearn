@@ -1,0 +1,95 @@
+﻿syntax = "proto3";
+
+package lesson;
+
+option csharp_namespace = "Lesson";
+
+service LessonsService
+{
+	rpc GetCategories (EmptyRequest) returns (CategoryListResponse);
+	rpc GetLessonsByCategories (CategoryRequest) returns (LessonListResponse);
+	rpc GetLessonDetails (LessonDetailRequest) returns (LessonDetailResponse);
+}
+
+message EmptyRequest {}
+
+message CategoryDto
+{
+	string id = 1;
+	string title = 2;
+	string description = 3;
+	int32 order_index = 4;
+}
+
+message CategoryListResponse
+{
+	repeated CategoryDto categories = 1;
+}
+
+message CategoryRequest
+{
+	string category_id = 1;
+}
+
+message LessonSummaryDto
+{
+	string id = 1;
+    string category_id = 2;
+    string title = 3;
+    string description = 4;
+    int32 order_index = 5;
+    int32 estimated_minutes = 6;
+}
+
+message LessonListResponse
+{
+	repeated LessonSummaryDto lessons = 1;
+}
+
+message LessonDetailRequest
+{
+	string lesson_id = 1;
+}
+
+message LessonDetailResponse
+{
+    string id = 1;
+    string category_id = 2;
+    string title = 3;
+    string description = 4;
+    int32 estimated_minutes = 5;
+
+    repeated LessonSectionDto sections = 6;
+}
+
+message LessonSectionDto
+{
+    string id = 1;
+    string title = 2;
+    string content_markdown = 3;
+    string code_example = 4;
+    string code_language = 5;
+    int32 order_index = 6;
+
+    repeated LessonMediaDto media = 7;
+}
+
+enum MediaType
+{
+    MEDIA_TYPE_UNSPECIFIED = 0;
+    IMAGE = 1;
+    VIDEO = 2;
+    AUDIO = 3;
+    DOCUMENT = 4;
+}
+
+message LessonMediaDto
+{
+    string id = 1;
+    string file_name = 2;
+    string content_type = 3;
+    MediaType media_type = 4;
+    string description = 5;
+    string url = 6;
+    int32 order_index = 7;
+}

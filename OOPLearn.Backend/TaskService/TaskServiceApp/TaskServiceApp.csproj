@@ -11,6 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TaskService.Infrastructure\TaskService.Infrastructure.csproj" />
+    <ProjectReference Include="..\TaskService.Persistence\TaskService.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
 	 <Protobuf Include="Protos\task.proto" GrpcServices="Server" />
   </ItemGroup>
 

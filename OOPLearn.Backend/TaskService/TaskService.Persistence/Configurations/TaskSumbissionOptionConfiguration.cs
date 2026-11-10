@@ -15,7 +15,7 @@ namespace TaskService.Persistence.Configurations
             builder.HasOne(x => x.TaskOption)
                 .WithMany()
                 .HasForeignKey(x => x.TaskOptionId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasIndex(x => new { x.SubmissionId, x.TaskOptionId })
                 .IsUnique();

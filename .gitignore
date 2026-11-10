@@ -52,3 +52,4 @@ logs/
 Thumbs.db
 desktop.ini
 /OOPLearn.Backend/LessonService/LessonServiceApp/appsettings.json
+/OOPLearn.Backend/TaskService/TaskServiceApp/appsettings.json

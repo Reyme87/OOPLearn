@@ -1,12 +1,12 @@
-﻿import "google/protobuf/timestamp.proto";
+﻿syntax = "proto3";
 
-syntax = "proto3";
+import "google/protobuf/timestamp.proto";
 
 package tasks;
 
 option csharp_namespace = "Tasks";
 
-service TaskService
+service TasksService
 {
     rpc GetTasksByLesson (LessonTaskRequest) returns (TaskListResponse);
     rpc GetTaskDetails (TaskDetailRequest) returns (TaskDetailResponse);

@@ -1,4 +1,6 @@
-﻿namespace TaskService.Application.DTOs
+﻿using TaskService.Domain;
+
+namespace TaskService.Application.DTOs
 {
     public class TaskDto
     {
@@ -8,5 +10,6 @@
         public string Description { get; set; } = string.Empty;
         public int OrderIndex { get; set; }
         public int Points { get; set; }
+        public TaskType Type { get; set; }
     }
 }

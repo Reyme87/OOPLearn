@@ -18,9 +18,7 @@ namespace ApiGateway.Controllers
 
         // GET api/tasks/lessons/{lessonId}
         [HttpGet("lessons/{lessonId}")]
-        public async Task<IActionResult> GetTasksByLesson(
-            string lessonId,
-            CancellationToken cancellationToken)
+        public async Task<IActionResult> GetTasksByLesson(string lessonId, CancellationToken cancellationToken)
         {
             if (!Guid.TryParse(lessonId, out _))
                 return BadRequest("Некорректный идентификатор урока.");
@@ -50,9 +48,7 @@ namespace ApiGateway.Controllers
 
         // GET api/tasks/{id}
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetTaskById(
-            string id,
-            CancellationToken cancellationToken)
+        public async Task<IActionResult> GetTaskById(string id, CancellationToken cancellationToken)
         {
             if (!Guid.TryParse(id, out _))
                 return BadRequest("Некорректный идентификатор задания.");
@@ -97,10 +93,7 @@ namespace ApiGateway.Controllers
 
         // POST api/tasks/{id}/submissions
         [HttpPost("{id}/submissions")]
-        public async Task<IActionResult> SubmitSolution(
-            string id,
-            [FromBody] SubmitTaskRequest request,
-            CancellationToken cancellationToken)
+        public async Task<IActionResult> SubmitSolution(string id, [FromBody] SubmitTaskRequest request, CancellationToken cancellationToken)
         {
             if (!Guid.TryParse(id, out _))
                 return BadRequest("Некорректный идентификатор задания.");
@@ -117,12 +110,9 @@ namespace ApiGateway.Controllers
                     SubmittedCode = request.SubmittedCode
                 };
 
-                grpcRequest.SelectedOptionIds.AddRange(
-                    request.SelectedOptionIds);
+                grpcRequest.SelectedOptionIds.AddRange(request.SelectedOptionIds);
 
-                var response = await _taskClient.SubmitTaskSolutionAsync(
-                    grpcRequest,
-                    cancellationToken: cancellationToken);
+                var response = await _taskClient.SubmitTaskSolutionAsync(grpcRequest, cancellationToken: cancellationToken);
 
                 return Ok(new
                 {
@@ -132,6 +122,35 @@ namespace ApiGateway.Controllers
                     response.Feedback,
                     response.SubmittedAt
                 });
+            }
+            catch (RpcException exception)
+            {
+                return HandleGrpcException(exception);
+            }
+        }
+
+        // GET api/tasks/users/{userId}/submissions
+        [HttpGet("users/{userId}/submissions")]
+        public async Task<IActionResult> GetUserSubmissions(string userId, CancellationToken cancellationToken)
+        {
+            if (!Guid.TryParse(userId, out _))
+                return BadRequest("Некорректный идентификатор пользователя.");
+
+            try
+            {
+                var response = await _taskClient.GetUserSubmissionsAsync(
+                    new UserSubmissionsRequest { UserId = userId },
+                    cancellationToken: cancellationToken);
+
+                return Ok(response.Submissions.Select(submission => new
+                {
+                    submission.Id,
+                    submission.TaskId,
+                    Status = submission.Status.ToString(),
+                    submission.EarnedPoints,
+                    submission.Feedback,
+                    submission.SubmittedAt
+                }));
             }
             catch (RpcException exception)
             {

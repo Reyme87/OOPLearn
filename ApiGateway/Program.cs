@@ -8,7 +8,7 @@ builder.Services.AddGrpcClient<LessonsService.LessonsServiceClient>(options =>
     options.Address = new Uri("http://localhost:5290");
 });
 
-builder.Services.AddGrpcClient<TaskService.TaskServiceClient>(options =>
+builder.Services.AddGrpcClient<TasksService.TasksServiceClient>(options =>
 {
     options.Address = new Uri("http://localhost:5059");
 });

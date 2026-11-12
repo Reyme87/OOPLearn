@@ -1,0 +1,127 @@
+﻿syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package tasks;
+
+option csharp_namespace = "Tasks";
+
+service TasksService
+{
+    rpc GetTasksByLesson (LessonTaskRequest) returns (TaskListResponse);
+    rpc GetTaskDetails (TaskDetailRequest) returns (TaskDetailResponse);
+    rpc SubmitTaskSolution (SubmitSolutionRequest) returns (SubmitSolutionResponse);
+    rpc GetUserSubmissions (UserSubmissionsRequest) returns (UserSubmissionsResponse);
+}
+
+message LessonTaskRequest
+{
+    string lesson_id = 1;
+}
+
+message TaskDetailRequest
+{
+    string task_id = 1;
+}
+
+enum TaskType
+{
+    UNKNOWN = 0;
+    SINGLE_CHOICE = 1;
+    MULTIPLE_CHOICE = 2;
+    CODE_SNIPPET = 3;
+}
+
+message TaskDto
+{
+    string id = 1;
+    string lesson_id = 2;
+    string title = 3;
+    string description = 4;
+    TaskType type = 5;
+    int32 points = 6;
+    int32 order_index = 7;
+}
+
+message TaskListResponse
+{
+    repeated TaskDto tasks = 1;
+}
+
+message TaskOptionDto
+{
+    string id = 1;
+    string text = 2;
+    int32 order_index = 3;
+}
+
+message TaskTestCaseDto
+{
+    string id = 1;
+    string input = 2;
+    string expected_output = 3;
+    int32 order_index = 4;
+}
+
+message TaskDetailResponse
+{
+    string id = 1;
+    string lesson_id = 2;
+    string title = 3;
+    string description = 4;
+    string content = 5;
+    TaskType type = 6;
+    int32 points = 7;
+    string code_language = 8;
+    string starter_code = 9;
+
+    repeated TaskOptionDto options = 10;
+    repeated TaskTestCaseDto test_cases = 11;
+}
+
+message SubmitSolutionRequest
+{
+    string task_id = 1;
+    string user_id = 2;
+    repeated string selected_option_ids = 3;
+    string answer_text = 4;
+    string submitted_code = 5;
+}
+
+enum SubmissionStatus
+{
+    SUBMISSION_STATUS_UNKNOWN = 0;
+    PENDING = 1;
+    ACCEPTED = 2;
+    REJECTED = 3;
+    ERROR = 4;
+}
+
+message SubmitSolutionResponse
+{
+    string submission_id = 1;
+    SubmissionStatus status = 2;
+    int32 earned_points = 3;
+    string feedback = 4;
+    google.protobuf.Timestamp submitted_at = 5;
+}
+
+message UserSubmissionsRequest
+{
+    string user_id = 1;
+}
+
+message SubmissionDto
+{
+    string id = 1;
+    string task_id = 2;
+    SubmissionStatus status = 3;
+    int32 earned_points = 4;
+    string feedback = 5;
+    string submitted_at = 6;
+}
+
+message UserSubmissionsResponse
+{
+    repeated SubmissionDto submissions = 1;
+}

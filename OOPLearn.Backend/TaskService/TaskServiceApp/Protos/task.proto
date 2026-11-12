@@ -11,6 +11,7 @@ service TasksService
     rpc GetTasksByLesson (LessonTaskRequest) returns (TaskListResponse);
     rpc GetTaskDetails (TaskDetailRequest) returns (TaskDetailResponse);
     rpc SubmitTaskSolution (SubmitSolutionRequest) returns (SubmitSolutionResponse);
+    rpc GetUserSubmissions (UserSubmissionsRequest) returns (UserSubmissionsResponse);
 }
 
 message LessonTaskRequest
@@ -103,4 +104,24 @@ message SubmitSolutionResponse
     int32 earned_points = 3;
     string feedback = 4;
     google.protobuf.Timestamp submitted_at = 5;
+}
+
+message UserSubmissionsRequest
+{
+    string user_id = 1;
+}
+
+message SubmissionDto
+{
+    string id = 1;
+    string task_id = 2;
+    SubmissionStatus status = 3;
+    int32 earned_points = 4;
+    string feedback = 5;
+    string submitted_at = 6;
+}
+
+message UserSubmissionsResponse
+{
+    repeated SubmissionDto submissions = 1;
 }

@@ -152,6 +152,31 @@ namespace TaskServiceApp.Services
             }
         }
 
+        public override async Task<UserSubmissionsResponse> GetUserSubmissions(UserSubmissionsRequest request, ServerCallContext context)
+        {
+            if (!Guid.TryParse(request.UserId, out var userId))
+            {
+                throw new RpcException(new Status(StatusCode.InvalidArgument, "Некорректный идентификатор пользователя."));
+            }
+
+            var submissions = await _submissionService.GetByUserAsync(userId, context.CancellationToken);
+
+            var response = new UserSubmissionsResponse();
+
+            response.Submissions.AddRange(submissions.Select(submission =>
+                new SubmissionDto
+                {
+                    Id = submission.Id.ToString(),
+                    TaskId = submission.TaskId.ToString(),
+                    Status = (Tasks.SubmissionStatus)(int)submission.Status,
+                    EarnedPoints = submission.Score,
+                    Feedback = submission.Feedback ?? string.Empty,
+                    SubmittedAt = submission.SubmittedAt.ToString("O")
+                }));
+
+            return response;
+        }
+
         private static Tasks.TaskType MapTaskType(TaskService.Domain.TaskType type)
         {
             return type switch

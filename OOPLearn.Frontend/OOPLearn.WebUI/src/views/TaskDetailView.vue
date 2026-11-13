@@ -56,13 +56,23 @@ const result = ref<SubmissionResponse | null>(null)
 
 const selectedOptionIds = ref<string[]>([])
 const submittedCode = ref('')
+const previousSubmission = ref<{
+  id: string;
+  status: string;
+  earnedPoints: number;
+  feedback: string;
+  submittedAt: string;
+} | null>(null);
 
 const isSingleChoice = computed(() => task.value?.type === 'SingleChoice')
 const isMultipleChoice = computed(() => task.value?.type === 'MultipleChoice')
 const isCodeTask = computed(() => task.value?.type === 'CodeSnippet')
+const isAlreadyCompleted = computed(
+  () => previousSubmission.value?.status === 'Accepted'
+);
 
 const canSubmit = computed(() => {
-    if (!task.value) return false
+    if (!task.value || isAlreadyCompleted.value) return false
 
     if (isSingleChoice.value || isMultipleChoice.value) {
         return selectedOptionIds.value.length > 0
@@ -83,6 +93,8 @@ async function loadTask() {
         const response = await api.get<Task>(`/tasks/${taskId}`)
         task.value = response.data
         submittedCode.value = response.data.starterCode || ''
+
+        await fetchPreviousSubmission()
     } catch (err) {
         console.error(err)
         error.value = 'Не удалось загрузить задание.'
@@ -107,7 +119,7 @@ function toggleOption(optionId: string) {
 }
 
 async function submitSolution() {
-    if (!task.value || !canSubmit.value) return
+    if (!task.value || !canSubmit.value || isAlreadyCompleted.value) return
 
     if (isCodeTask.value) {
         error.value = 'Проверка программного кода пока не реализована.'
@@ -129,6 +141,16 @@ async function submitSolution() {
         )
 
         result.value = response.data
+
+        if (response.data.status === 'Accepted') {
+            previousSubmission.value = {
+                id: response.data.submissionId,
+                status: response.data.status,
+                earnedPoints: response.data.earnedPoints,
+                feedback: response.data.feedback,
+                submittedAt: new Date().toISOString()
+            }
+        }
     } catch (err) {
         console.error(err)
         error.value = 'Не удалось отправить ответ. Попробуйте ещё раз.'
@@ -151,6 +173,26 @@ function getTaskTypeName(type: string) {
         case 'MultipleChoice': return 'Несколько вариантов ответа'
         case 'CodeSnippet': return 'Написание кода'
         default: return 'Практическое задание'
+    }
+}
+
+async function fetchPreviousSubmission() {
+    try {
+        const response = await api.get(
+            `/tasks/users/${userId}/submissions`
+        )
+
+        const taskSubmissions = response.data.filter(
+            (submission: any) => String(submission.taskId) === taskId
+        )
+
+        previousSubmission.value =
+            taskSubmissions.find(
+                (submission: any) => submission.status === 'Accepted'
+            ) ?? null
+
+    } catch (error) {
+        console.error('Ошибка загрузки результатов задания:', error)
     }
 }
 
@@ -189,9 +231,26 @@ onMounted(loadTask)
             </header>
 
             <section class="task-content">
+                <div v-if="isAlreadyCompleted" class="completed-message">
+                    <div class="result-status accepted">
+                        <AppIcon name="check" :size="22" />
+                        Задание уже выполнено!
+                    </div>
+
+                    <p>{{ previousSubmission?.feedback }}</p>
+
+                    <div class="earned-points">
+                        Получено баллов:
+                        <strong>
+                            {{ previousSubmission?.earnedPoints }} / {{ task.points }}
+                        </strong>
+                    </div>
+
+                    <p>Повторное выполнение этого задания не требуется.</p>
+                </div>
                 <h2>Условие задания</h2>
                 <p class="task-question">{{ task.content }}</p>
-
+                
                 <div v-if="isSingleChoice || isMultipleChoice" class="options">
                     <h3>
                         {{
@@ -254,6 +313,7 @@ onMounted(loadTask)
                 >
                     {{ submitting ? 'Отправка...' : 'Отправить ответ' }}
                 </button>
+                
             </section>
 
             <section v-if="result" class="result-panel">
@@ -459,5 +519,18 @@ onMounted(loadTask)
 .earned-points {
     margin-top: 16px;
     color: #475569;
+}
+
+.completed-message {
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #bbf7d0;
+    border-radius: 12px;
+    background: #f0fdf4;
+}
+
+.completed-message p {
+    color: #475569;
+    line-height: 1.6;
 }
 </style>

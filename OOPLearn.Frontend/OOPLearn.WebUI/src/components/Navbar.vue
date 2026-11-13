@@ -20,7 +20,7 @@ import AppIcon from './AppIcon.vue';
         <router-link to="/lessons" class="nav-link" active-class="active">
           Уроки
         </router-link>
-        <router-link to="/tasks/1" class="nav-link" active-class="active">
+        <router-link to="/tasks" class="nav-link" active-class="active">
           Практика
         </router-link>
       </nav>

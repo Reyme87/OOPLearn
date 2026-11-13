@@ -30,6 +30,13 @@ namespace TaskService.Infrastructure.Services
             if (task is null)
                 throw new KeyNotFoundException("Задание не найдено.");
 
+            var acceptedSubmission = await _submissionRepository.GetAcceptedByUserAndTaskAsync(request.UserId, task.Id, cancellationToken);
+
+            if (acceptedSubmission is not null)
+            {
+                return MapToDto(acceptedSubmission);
+            }
+
             // Выполнение пользовательского кода пока не поддерживается.
             if (task.Type == TaskType.Code)
             {

@@ -23,6 +23,9 @@ import AppIcon from './AppIcon.vue';
         <router-link to="/tasks" class="nav-link" active-class="active">
           Практика
         </router-link>
+        <router-link to="/submissions" class="nav-link" active-class="active">
+          Мои результаты
+        </router-link>
       </nav>
 
       <div class="navbar-actions">

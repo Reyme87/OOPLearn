@@ -4,6 +4,7 @@ import LessonView from "../views/LessonView.vue";
 import LessonDetailView from "../views/LessonDetailView.vue";
 import TasksView from "../views/TasksView.vue";
 import TaskDetailView from "../views/TaskDetailView.vue";
+import SubmissionsView from "../views/SubmissionsView.vue";
 
 const routes = [
     { path: '/', name: 'home', component: HomeView },
@@ -11,7 +12,8 @@ const routes = [
     { path: '/lesson/:id', name: 'lesson', component: LessonDetailView },
     { path: '/tasks', name: 'all-tasks', component: TasksView },
     { path: '/lesson/:id/tasks', name: 'lesson-tasks', component: TasksView },
-    { path: '/tasks/:id', name: 'task', component: TaskDetailView }
+    { path: '/tasks/:id', name: 'task', component: TaskDetailView },
+    { path: '/submissions', name: 'submissions', component: SubmissionsView }
 ]
 
 const router = createRouter({

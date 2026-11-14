@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/Core/">
+    <Project Path="../AuthService.Application/AuthService.Application.csproj" />
+    <Project Path="../AuthService.Domain/AuthService.Domain.csproj" />
+  </Folder>
+  <Folder Name="/Infrastructure/">
+    <Project Path="../AuthService.Persistence/AuthService.Persistence.csproj" />
+  </Folder>
+  <Folder Name="/Presentation/">
+    <Project Path="AuthServiceApp.csproj" />
+  </Folder>
+</Solution>

@@ -15,4 +15,8 @@
     <Folder Include="Services\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AuthService.Persistence\AuthService.Persistence.csproj" />
+  </ItemGroup>
+
 </Project>

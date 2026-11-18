@@ -4,6 +4,7 @@
     <Project Path="../AuthService.Domain/AuthService.Domain.csproj" />
   </Folder>
   <Folder Name="/Infrastructure/">
+    <Project Path="../AuthService.Infrastructure/AuthService.Infrastructure.csproj" Id="fd2c854e-0799-4ed9-8c4f-ff925e7ab98a" />
     <Project Path="../AuthService.Persistence/AuthService.Persistence.csproj" />
   </Folder>
   <Folder Name="/Presentation/">

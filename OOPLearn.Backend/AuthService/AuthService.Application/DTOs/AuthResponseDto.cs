@@ -1,6 +1,6 @@
 ﻿namespace AuthService.Application.DTOs
 {
-    public class AuthRepsonseDto
+    public class AuthResponseDto
     {
         public Guid Id { get; set; }
         public string Email { get; set; } = string.Empty;

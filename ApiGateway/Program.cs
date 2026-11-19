@@ -1,3 +1,4 @@
+using Auth;
 using Lesson;
 using Tasks;
 
@@ -11,6 +12,11 @@ builder.Services.AddGrpcClient<LessonsService.LessonsServiceClient>(options =>
 builder.Services.AddGrpcClient<TasksService.TasksServiceClient>(options =>
 {
     options.Address = new Uri("http://localhost:5059");
+});
+
+builder.Services.AddGrpcClient<AuthGrpcService.AuthGrpcServiceClient>(options =>
+{
+    options.Address = new Uri("http://localhost:5060");
 });
 
 builder.Services.AddControllers();

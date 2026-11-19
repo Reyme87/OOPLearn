@@ -28,4 +28,7 @@
 		<Protobuf Include="Protos\lesson.proto" GrpcServices="Client" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<Protobuf Include="Protos\auth.proto" GrpcServices="Client" />
+	</ItemGroup>
 </Project>

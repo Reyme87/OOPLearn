@@ -1,8 +1,8 @@
-
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { authService } from '../services/auth'
+import { notifyAuthChanged } from '../services/authState'
 
 const router = useRouter()
 
@@ -28,6 +28,8 @@ const login = async () => {
             firstName: response.firstName,
             lastName: response.lastName
         }))
+
+        notifyAuthChanged()
 
         await router.push('/')
     } catch (error: any) {

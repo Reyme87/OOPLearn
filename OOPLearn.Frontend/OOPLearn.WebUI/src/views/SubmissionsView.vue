@@ -18,8 +18,6 @@ interface Task {
   points: number;
 }
 
-const userId = '3fa85f64-5717-4562-b3fc-2c963f66afa6';
-
 const submissions = ref<Submission[]>([]);
 const taskTitles = ref<Record<string, string>>({});
 
@@ -32,7 +30,7 @@ async function fetchSubmissions() {
 
   try {
     const response = await api.get<Submission[]>(
-      `/tasks/users/${userId}/submissions`
+      `/tasks/users/submissions`
     );
 
     submissions.value = response.data;

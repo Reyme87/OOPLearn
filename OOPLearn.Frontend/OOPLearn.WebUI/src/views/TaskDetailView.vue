@@ -46,7 +46,6 @@ const route = useRoute()
 const router = useRouter()
 
 const taskId = String(route.params.id)
-const userId = '3fa85f64-5717-4562-b3fc-2c963f66afa6'
 
 const task = ref<Task | null>(null)
 const loading = ref(true)
@@ -134,7 +133,6 @@ async function submitSolution() {
         const response = await api.post<SubmissionResponse>(
             `/tasks/${taskId}/submissions`,
             {
-                userId,
                 selectedOptionIds: selectedOptionIds.value,
                 submittedCode: submittedCode.value
             }
@@ -179,7 +177,7 @@ function getTaskTypeName(type: string) {
 async function fetchPreviousSubmission() {
     try {
         const response = await api.get(
-            `/tasks/users/${userId}/submissions`
+            `/tasks/users/submissions`
         )
 
         const taskSubmissions = response.data.filter(

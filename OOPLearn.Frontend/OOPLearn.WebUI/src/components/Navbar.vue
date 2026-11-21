@@ -1,6 +1,5 @@
-
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 import AppIcon from './AppIcon.vue';
 
@@ -17,6 +16,10 @@ const user = ref<User | null>(
   JSON.parse(localStorage.getItem('user') || 'null')
 );
 
+const updateUser = () => {
+  user.value = JSON.parse(localStorage.getItem('user') || 'null');
+};
+
 const logout = async () => {
   localStorage.removeItem('accessToken');
   localStorage.removeItem('user');
@@ -25,6 +28,14 @@ const logout = async () => {
 
   await router.push('/login');
 };
+
+onMounted(() => {
+  window.addEventListener('auth-changed', updateUser);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('auth-changed', updateUser);
+});
 </script>
 
 <template>

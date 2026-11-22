@@ -45,7 +45,7 @@ const goToLessons = () => {
           <span class="card-link">Перейти &rarr;</span>
         </div>
 
-        <div class="card" @click="router.push('/tasks/1')">
+        <div class="card" @click="router.push('/tasks')">
           <div class="card-icon practice-icon">
             <AppIcon name="code" :size="32" color="#10b981" />
           </div>
@@ -54,12 +54,12 @@ const goToLessons = () => {
           <span class="card-link">Перейти &rarr;</span>
         </div>
 
-        <div class="card">
-          <div class="card-icon projects-icon">
+        <div class="card" @click="router.push('/submissions')">
+          <div class="card-icon results-icon">
             <AppIcon name="chart" :size="32" color="#8b5cf6" />
           </div>
-          <h3>Проекты</h3>
-          <p>Создавайте собственные приложения</p>
+          <h3>Результаты</h3>
+          <p>Отслеживайте собственные результаты</p>
           <span class="card-link">Перейти &rarr;</span>
         </div>
       </div>

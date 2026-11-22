@@ -1,6 +1,41 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router';
+import { ref, onMounted, onUnmounted } from 'vue';
+import { RouterLink, useRouter } from 'vue-router';
 import AppIcon from './AppIcon.vue';
+
+const router = useRouter();
+
+interface User {
+  userId: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+}
+
+const user = ref<User | null>(
+  JSON.parse(localStorage.getItem('user') || 'null')
+);
+
+const updateUser = () => {
+  user.value = JSON.parse(localStorage.getItem('user') || 'null');
+};
+
+const logout = async () => {
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('user');
+
+  user.value = null;
+
+  await router.push('/login');
+};
+
+onMounted(() => {
+  window.addEventListener('auth-changed', updateUser);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('auth-changed', updateUser);
+});
 </script>
 
 <template>
@@ -20,16 +55,40 @@ import AppIcon from './AppIcon.vue';
         <router-link to="/lessons" class="nav-link" active-class="active">
           Уроки
         </router-link>
-        <router-link to="/tasks/1" class="nav-link" active-class="active">
+        <router-link to="/tasks" class="nav-link" active-class="active">
           Практика
+        </router-link>
+
+        <router-link
+          v-if="user"
+          to="/submissions"
+          class="nav-link"
+          active-class="active"
+        >
+          Мои результаты
         </router-link>
       </nav>
 
       <div class="navbar-actions">
-        <span class="user-badge">
-          <AppIcon name="shield" :size="16" color="#10b981" />
-          C# / .NET 8
-        </span>
+        <template v-if="user">
+          <span class="user-name">
+            {{ user.firstName }} {{ user.lastName }}
+          </span>
+
+          <button class="auth-button logout-button" @click="logout">
+            Выйти
+          </button>
+        </template>
+
+        <template v-else>
+          <router-link to="/login" class="auth-button login-button">
+            Войти
+          </router-link>
+
+          <router-link to="/register" class="auth-button register-button">
+            Регистрация
+          </router-link>
+        </template>
       </div>
     </div>
   </header>
@@ -52,6 +111,7 @@ import AppIcon from './AppIcon.vue';
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
 }
 
 .navbar-brand {
@@ -106,18 +166,38 @@ import AppIcon from './AppIcon.vue';
 .navbar-actions {
   display: flex;
   align-items: center;
+  gap: 0.75rem;
 }
 
-.user-badge {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  padding: 0.35rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
+.user-name {
+  font-size: 0.9rem;
   font-weight: 600;
   color: #334155;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
+}
+
+.auth-button {
+  padding: 0.5rem 0.85rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.login-button {
+  color: #2563eb;
+  border: 1px solid #2563eb;
+  background: white;
+}
+
+.register-button,
+.logout-button {
+  color: white;
+  border: 1px solid #2563eb;
+  background: #2563eb;
+}
+
+.auth-button:hover {
+  opacity: 0.85;
 }
 </style>

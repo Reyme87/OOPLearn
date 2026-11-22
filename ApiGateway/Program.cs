@@ -75,6 +75,20 @@ builder.Services
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("VueClient", policy =>
+    {
+        policy
+            .WithOrigins(
+                "http://127.0.0.1:5173",
+                "https://127.0.0.1:5173"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 app.UseAuthentication();
@@ -87,6 +101,8 @@ app.UseSwaggerUI(config =>
 
     config.RoutePrefix = string.Empty;
 });
+
+app.UseCors("VueClient");
 
 app.MapControllers();
 

@@ -9,5 +9,7 @@ namespace TaskService.Application.Interfaces.Repositories
         Task<List<TaskSubmission>> GetByUserAsync(Guid userId, CancellationToken cancellationToken);
 
         Task AddAsync(TaskSubmission taskSubmission, CancellationToken cancellationToken);
+
+        Task<TaskSubmission?> GetAcceptedByUserAndTaskAsync(Guid userId, Guid taskId, CancellationToken cancellationToken);
     }
 }

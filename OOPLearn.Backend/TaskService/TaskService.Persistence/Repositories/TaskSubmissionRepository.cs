@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskService.Application.Interfaces;
 using TaskService.Application.Interfaces.Repositories;
+using TaskService.Domain;
 using TaskService.Domain.Models;
 
 namespace TaskService.Persistence.Repositories
@@ -32,6 +33,15 @@ namespace TaskService.Persistence.Repositories
             await _context.TaskSubmissions.AddAsync(
                 submission,
                 cancellationToken);
+        }
+
+        public async Task<TaskSubmission?> GetAcceptedByUserAndTaskAsync(Guid userId, Guid taskId, CancellationToken cancellationToken)
+        {
+            return await _context.TaskSubmissions
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.UserId == userId
+                         && x.TaskId == taskId
+                         && x.Status == SubmissionStatus.Accepted, cancellationToken);
         }
     }
 }

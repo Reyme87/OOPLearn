@@ -1,6 +1,8 @@
 ﻿using ApiGateway.Dtos;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Tasks;
 
 namespace ApiGateway.Controllers
@@ -92,27 +94,33 @@ namespace ApiGateway.Controllers
         }
 
         // POST api/tasks/{id}/submissions
+        [Authorize]
         [HttpPost("{id}/submissions")]
         public async Task<IActionResult> SubmitSolution(string id, [FromBody] SubmitTaskRequest request, CancellationToken cancellationToken)
         {
             if (!Guid.TryParse(id, out _))
                 return BadRequest("Некорректный идентификатор задания.");
 
-            if (request.UserId == Guid.Empty)
-                return BadRequest("Не указан пользователь.");
+            var userIdValue = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!Guid.TryParse(userIdValue, out var userId))
+                return Unauthorized();
 
             try
             {
                 var grpcRequest = new SubmitSolutionRequest
                 {
                     TaskId = id,
-                    UserId = request.UserId.ToString(),
+                    UserId = userId.ToString(),
                     SubmittedCode = request.SubmittedCode
                 };
 
-                grpcRequest.SelectedOptionIds.AddRange(request.SelectedOptionIds);
+                grpcRequest.SelectedOptionIds.AddRange(
+                    request.SelectedOptionIds);
 
-                var response = await _taskClient.SubmitTaskSolutionAsync(grpcRequest, cancellationToken: cancellationToken);
+                var response = await _taskClient.SubmitTaskSolutionAsync(
+                    grpcRequest,
+                    cancellationToken: cancellationToken);
 
                 return Ok(new
                 {
@@ -130,16 +138,19 @@ namespace ApiGateway.Controllers
         }
 
         // GET api/tasks/users/{userId}/submissions
-        [HttpGet("users/{userId}/submissions")]
-        public async Task<IActionResult> GetUserSubmissions(string userId, CancellationToken cancellationToken)
+        [Authorize]
+        [HttpGet("users/submissions")]
+        public async Task<IActionResult> GetUserSubmissions(CancellationToken cancellationToken)
         {
-            if (!Guid.TryParse(userId, out _))
-                return BadRequest("Некорректный идентификатор пользователя.");
+            var userIdValue = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!Guid.TryParse(userIdValue, out var userId))
+                return Unauthorized();
 
             try
             {
                 var response = await _taskClient.GetUserSubmissionsAsync(
-                    new UserSubmissionsRequest { UserId = userId },
+                    new UserSubmissionsRequest { UserId = userIdValue },
                     cancellationToken: cancellationToken);
 
                 return Ok(response.Submissions.Select(submission => new

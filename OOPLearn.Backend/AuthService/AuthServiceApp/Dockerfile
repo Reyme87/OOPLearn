@@ -15,6 +15,9 @@ WORKDIR /app
 
 COPY --from=build /app/publish .
 
+ENV ASPNETCORE_Kestrel__Endpoints__Grpc__Url=http://+:5060
+ENV ASPNETCORE_Kestrel__Endpoints__Grpc__Protocols=Http2
+
 EXPOSE 5060
 
 ENTRYPOINT ["dotnet", "AuthServiceApp.dll"]

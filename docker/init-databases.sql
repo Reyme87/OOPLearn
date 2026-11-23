@@ -1,0 +1,3 @@
+CREATE DATABASE lesson_db;
+CREATE DATABASE task_db;
+CREATE DATABASE auth_db;

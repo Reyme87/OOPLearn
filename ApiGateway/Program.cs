@@ -91,6 +91,8 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+app.UseCors("VueClient");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -101,8 +103,6 @@ app.UseSwaggerUI(config =>
 
     config.RoutePrefix = string.Empty;
 });
-
-app.UseCors("VueClient");
 
 app.MapControllers();
 

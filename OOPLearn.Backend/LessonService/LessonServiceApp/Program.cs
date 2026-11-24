@@ -13,7 +13,7 @@ builder.WebHost.ConfigureKestrel(options =>
 builder.Services.AddGrpc();
 
 builder.Services.AddPersistence(builder.Configuration);
-builder.Services.AddInfrastructure();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 

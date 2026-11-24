@@ -8,19 +8,26 @@ using Tasks;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 builder.Services.AddGrpcClient<LessonsService.LessonsServiceClient>(options =>
 {
-    options.Address = new Uri("http://localhost:5290");
+    options.Address = new Uri(
+        builder.Configuration["GrpcServices:Lesson"]
+        ?? "http://localhost:5290");
 });
 
 builder.Services.AddGrpcClient<TasksService.TasksServiceClient>(options =>
 {
-    options.Address = new Uri("http://localhost:5059");
+    options.Address = new Uri(
+        builder.Configuration["GrpcServices:Task"]
+        ?? "http://localhost:5059");
 });
 
 builder.Services.AddGrpcClient<AuthGrpcService.AuthGrpcServiceClient>(options =>
 {
-    options.Address = new Uri("http://localhost:5060");
+    options.Address = new Uri(
+        builder.Configuration["GrpcServices:Auth"]
+        ?? "http://localhost:5060");
 });
 
 builder.Services.AddControllers();
@@ -82,7 +89,8 @@ builder.Services.AddCors(options =>
         policy
             .WithOrigins(
                 "http://127.0.0.1:5173",
-                "https://127.0.0.1:5173"
+                "https://127.0.0.1:5173",
+                "http://localhost:5173"
             )
             .AllowAnyHeader()
             .AllowAnyMethod();

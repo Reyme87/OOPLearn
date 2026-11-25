@@ -1,4 +1,5 @@
 ﻿using LessonService.Application.DTOs;
+using LessonService.Application.Interfaces;
 using LessonService.Application.Interfaces.Repositories;
 using LessonService.Application.Interfaces.Services;
 
@@ -7,8 +8,9 @@ namespace LessonService.Infrastructure.Services
     public class LessonsService : ILessonService
     {
         private readonly ILessonRepository _repository;
+        private readonly IFileStorage _fileStorage;
 
-        public LessonsService(ILessonRepository repository) => _repository = repository;
+        public LessonsService(ILessonRepository repository, IFileStorage fileStorage) => (_repository, _fileStorage) = (repository, fileStorage);
 
         public async Task<List<LessonDto>> GetByCategoryAsync(Guid categoryId, CancellationToken cancellationToken)
         {
@@ -34,6 +36,39 @@ namespace LessonService.Infrastructure.Services
                 return null;
             }
 
+            var sections = new List<LessonSectionDto>();
+
+            foreach (var section in lesson.Sections.OrderBy(s => s.OrderIndex))
+            {
+                var sectionDto = new LessonSectionDto
+                {
+                    Id = section.Id,
+                    Title = section.Title,
+                    ContentMarkdown = section.ContentMarkdown,
+                    CodeExample = section.CodeExample,
+                    CodeLanguage = section.CodeLanguage,
+                    OrderIndex = section.OrderIndex
+                };
+
+                foreach (var media in section.Media.OrderBy(m => m.OrderIndex))
+                {
+                    var url = await _fileStorage.GetPresignedUrlAsync(media.S3Key);
+
+                    sectionDto.Media.Add(new LessonMediaDto
+                    {
+                        Id = media.Id,
+                        FileName = media.FileName,
+                        ContentType = media.ContentType,
+                        MediaType = media.MediaType,
+                        Description = media.Description,
+                        S3Key = url,
+                        OrderIndex = media.OrderIndex
+                    });
+                }
+
+                sections.Add(sectionDto);
+            }
+
             return new LessonDetailDto
             {
                 Id = lesson.Id,
@@ -41,27 +76,7 @@ namespace LessonService.Infrastructure.Services
                 Title = lesson.Title,
                 Description = lesson.Description,
                 EstimatedMinutes = lesson.EstimatedMinutes,
-                Sections = lesson.Sections.OrderBy(s => s.OrderIndex)
-                                          .Select(section => new LessonSectionDto
-                                          {
-                                              Id = section.Id,
-                                              Title = section.Title,
-                                              ContentMarkdown = section.ContentMarkdown,
-                                              CodeExample = section.CodeExample,
-                                              CodeLanguage = section.CodeLanguage,
-                                              OrderIndex = section.OrderIndex,
-                                              Media = section.Media.OrderBy(m => m.OrderIndex)
-                                                                   .Select(media => new LessonMediaDto
-                                                                   {
-                                                                       Id = media.Id,
-                                                                       FileName = media.FileName,
-                                                                       ContentType = media.ContentType,
-                                                                       MediaType = media.MediaType,
-                                                                       Description = media.Description,
-                                                                       S3Key = media.S3Key,
-                                                                       OrderIndex = media.OrderIndex
-                                                                   }).ToList()
-                                          }).ToList()
+                Sections = sections
             };
         }
     }

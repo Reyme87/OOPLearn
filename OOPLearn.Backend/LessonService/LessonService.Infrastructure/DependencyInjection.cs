@@ -1,5 +1,6 @@
 ﻿using Amazon.Runtime;
 using Amazon.S3;
+using LessonService.Application.Interfaces;
 using LessonService.Application.Interfaces.Services;
 using LessonService.Infrastructure.Services;
 using LessonService.Infrastructure.Storage;
@@ -17,7 +18,8 @@ namespace LessonService.Infrastructure
 
             var s3Options = new S3Options
             {
-                Endpoint = configuration["S3:Endpoint"] ?? "",
+                InternalEndpoint = configuration["S3:InternalEndpoint"] ?? "",
+                PublicEndpoint = configuration["S3:PublicEndpoint"] ?? "",
                 AccessKey = configuration["S3:AccessKey"] ?? "",
                 SecretKey = configuration["S3:SecretKey"] ?? "",
                 BucketName = configuration["S3:BucketName"] ?? "",
@@ -26,14 +28,31 @@ namespace LessonService.Infrastructure
 
             var credentials = new BasicAWSCredentials(s3Options.AccessKey, s3Options.SecretKey);
 
-            var s3Config = new AmazonS3Config
+            var internalConfig = new AmazonS3Config
             {
-                ServiceURL = s3Options.Endpoint,
+                ServiceURL = s3Options.InternalEndpoint,
                 ForcePathStyle = true,
-                UseHttp = !s3Options.UseSSL
+                UseHttp = true
             };
 
-            services.AddSingleton<IAmazonS3>(new AmazonS3Client(credentials, s3Config));
+            var publicConfig = new AmazonS3Config
+            {
+                ServiceURL = s3Options.PublicEndpoint,
+                ForcePathStyle = true,
+                UseHttp = true
+            };
+
+            var internalClient = new AmazonS3Client(
+                credentials,
+                internalConfig);
+
+            var publicClient = new AmazonS3Client(
+                credentials,
+                publicConfig);
+
+            services.AddSingleton(s3Options);
+            services.AddSingleton(new S3Clients(internalClient, publicClient));
+            services.AddScoped<IFileStorage, S3FileStorage>();
 
             return services;
         }
